@@ -6,6 +6,8 @@ import ContactForm from 'components/ContactForm/ContactForm';
 import Filter from 'components/Filter/Filter';
 import ContactList from 'components/ContactList/ContactList';
 
+const CONTACT_KEY = 'contact-item-phonebook';
+
 class App extends Component {
 
   state = {
@@ -17,6 +19,22 @@ class App extends Component {
     ],
     filter: '',
   }
+
+  componentDidMount() { 
+    const getContacts = JSON.parse(localStorage.getItem(CONTACT_KEY));
+    
+    if (getContacts) {
+      this.setState({contacts: getContacts})
+    }
+   }
+
+  componentDidUpdate(_, prevState) {
+    const { contacts } = this.state;
+
+    if (prevState.contacts.length !== this.state.contacts.length) {
+      localStorage.setItem(CONTACT_KEY, JSON.stringify(contacts))
+    }
+}
 
   handleChange = e => {
     const {name, value} = e.target
